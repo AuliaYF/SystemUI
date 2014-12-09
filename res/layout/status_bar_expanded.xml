@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.systemui.statusbar.ExpandedView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="afterDescendants"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/notification_header_bg"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="11dp"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <com.android.systemui.statusbar.Clock
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#ffdfdfdf" />
+
+                <ImageView
+                    android:id="@+id/ic_settings_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:background="@drawable/ic_button_bg"
+                    android:padding="4dp"
+                    android:src="@drawable/com_android_systemui_ic_notify_settings_normal" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/clear_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/ic_button_bg"
+                android:paddingBottom="16dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="11dp"
+                android:src="@drawable/com_android_systemui_ic_notify_clear_normal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/indicator_brightness"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/settings_ic_appwidget_settings_brightness_full_holo" />
+
+            <SeekBar
+                android:id="@+id/seekbar_brightness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:max="255"
+                android:progress="100" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:overScrollMode="ifContentScrolls" >
+
+            <com.android.systemui.statusbar.NotificationLinearLayout
+                android:id="@+id/notificationLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/ongoingItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:id="@+id/latestItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </com.android.systemui.statusbar.NotificationLinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+</com.android.systemui.statusbar.ExpandedView>

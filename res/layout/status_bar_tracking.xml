@@ -30,7 +30,7 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_weight="1"
-         android:background="@drawable/shade_bg"
+         android:background="@drawable/notification_panel_bg"
          />
 
     <com.android.systemui.statusbar.CloseDragHandle android:id="@+id/close"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:scaleType="fitXY"
-            android:src="@drawable/status_bar_close_on"
+            android:src="@drawable/close_on"
             />
 
     </com.android.systemui.statusbar.CloseDragHandle>

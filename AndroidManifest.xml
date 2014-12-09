@@ -1,0 +1,72 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.systemui"
+    android:process="system"
+    android:sharedUserId="android.uid.system" >
+
+    <uses-permission android:name="android.permission.STATUS_BAR_SERVICE" />
+    <uses-permission android:name="android.permission.MANAGE_USB" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <uses-sdk android:minSdkVersion="9" />
+
+    <application
+        android:allowClearUserData="false"
+        android:icon="@drawable/ic_launcher_settings"
+        android:label="@string/app_label"
+        android:persistent="true" >
+        <service
+            android:name=".statusbar.StatusBarService"
+            android:exported="false" />
+
+        <activity
+            android:name=".usb.UsbStorageActivity"
+            android:excludeFromRecents="true" >
+        </activity>
+        <activity
+            android:name="com.android.internal.app.ExternalMediaFormatActivity"
+            android:excludeFromRecents="true"
+            android:theme="@*android:style/Theme.Dialog.Alert" >
+        </activity>
+
+        <!-- started from UsbDeviceSettingsManager -->
+        <activity
+            android:name=".usb.UsbConfirmActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:finishOnCloseSystemDialogs="true"
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@*android:style/Theme.Dialog.Alert" >
+        </activity>
+
+        <!-- started from UsbDeviceSettingsManager -->
+        <activity
+            android:name=".usb.UsbPermissionActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:finishOnCloseSystemDialogs="true"
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@*android:style/Theme.Dialog.Alert" >
+        </activity>
+
+        <!-- started from UsbDeviceSettingsManager -->
+        <activity
+            android:name=".usb.UsbResolverActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:finishOnCloseSystemDialogs="true"
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@*android:style/Theme.Dialog.Alert" >
+        </activity>
+
+        <!-- started from UsbDeviceSettingsManager -->
+        <activity
+            android:name=".usb.UsbAccessoryUriActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:finishOnCloseSystemDialogs="true"
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@*android:style/Theme.Dialog.Alert" >
+        </activity>
+    </application>
+
+</manifest>
