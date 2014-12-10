@@ -67,8 +67,6 @@ import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
@@ -76,7 +74,7 @@ import com.android.internal.statusbar.StatusBarIconList;
 import com.android.internal.statusbar.StatusBarNotification;
 import com.android.systemui.R;
 
-
+import br.com.lgkaiser.sgpoffline.activity.animation.ResizeAnimation;
 
 public class StatusBarService extends Service implements CommandQueue.Callbacks {
 	static final String TAG = "StatusBarService";
@@ -168,6 +166,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 	private ImageView mIndicatorBrightness;
 	private SeekBar mSeekbarBrightness;
 	private float mCurrentBrightness;
+	private LinearLayout mHeader;
+	private LinearLayout mBrightnessLayout;
+	private ImageView mQuickSettings;
+	private ImageView mSettings;
 
 	private class ExpandedDialog extends Dialog {
 		ExpandedDialog(Context context) {
@@ -288,6 +290,72 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 		mClearButton.setOnClickListener(mClearButtonListener);
 		mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
 		mNotificationLinearLayout = expanded.findViewById(R.id.notificationLinearLayout);
+		mHeader = (LinearLayout)expanded.findViewById(R.id.header);
+		mSettings = (ImageView)expanded.findViewById(R.id.ic_settings_button);
+		mSettings.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage("com.android.settings");
+				LaunchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(LaunchIntent);
+
+				animateCollapse();
+			}
+		});
+		
+		mBrightnessLayout = (LinearLayout)expanded.findViewById(R.id.layout_brightness);
+		mQuickSettings = (ImageView)expanded.findViewById(R.id.ic_quick_settings);
+		mQuickSettings.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if(mBrightnessLayout.getVisibility() == View.GONE){
+					mHeader.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 48));
+					ResizeAnimation animation = null;
+					animation = new ResizeAnimation(mHeader, 48, 83, true);
+					animation.setDuration(250);
+					animation.setAnimationListener(new Animation.AnimationListener() {
+
+						@Override
+						public void onAnimationStart(Animation animation) {}
+
+						@Override
+						public void onAnimationRepeat(Animation animation) {}
+
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							mBrightnessLayout.setVisibility(View.VISIBLE);
+						}
+					});
+					mHeader.setAnimation(animation);
+					mQuickSettings.setImageResource(R.drawable.com_android_systemui_ic_notify_open_normal);
+
+					mBrightnessLayout.setVisibility(View.VISIBLE);
+					return;
+				}
+				mHeader.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 83));
+				ResizeAnimation animation = null;
+				animation = new ResizeAnimation(mHeader, 83, 48, true);
+				animation.setDuration(250);
+				animation.setAnimationListener(new Animation.AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation) {
+						mBrightnessLayout.setVisibility(View.GONE);
+					}
+					@Override
+					public void onAnimationRepeat(Animation animation) {}
+					@Override
+					public void onAnimationEnd(Animation animation) {}
+				});
+
+				mHeader.setAnimation(animation);
+				mQuickSettings.setImageResource(R.drawable.com_android_systemui_ic_notify_quicksettings_normal);
+				mBrightnessLayout.setVisibility(View.GONE);
+			}
+		});
+
 		mIndicatorBrightness = (ImageView)expanded.findViewById(R.id.indicator_brightness);
 		mSeekbarBrightness = (SeekBar)expanded.findViewById(R.id.seekbar_brightness);
 
@@ -299,7 +367,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mSeekbarBrightness.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mSeekbarBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			int progress = 0;
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -350,7 +418,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		context.registerReceiver(mBroadcastReceiver, filter);
 	}
-	
+
 	public void changeBrightnessIndicator(int brightness){
 		int temp = 255 / 2;
 		int temp2 = temp / 2;
@@ -362,7 +430,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 			mIndicatorBrightness.setImageResource(R.drawable.settings_ic_appwidget_settings_brightness_full_holo);
 		}
 	}
-	
+
 	protected void addStatusBarView() {
 		Resources res = getResources();
 		final int height= res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
@@ -896,10 +964,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 			makeExpandedVisible();
 		} else {
 			// it's open, close it?
-					if (mAnimating) {
-						mAnimating = false;
-						mHandler.removeMessages(MSG_ANIMATE);
-					}
+			if (mAnimating) {
+				mAnimating = false;
+				mHandler.removeMessages(MSG_ANIMATE);
+			}
 			updateExpandedViewPos(y + mViewDelta);
 		}
 	}
